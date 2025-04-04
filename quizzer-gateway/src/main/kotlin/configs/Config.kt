@@ -10,6 +10,8 @@ data class Config(
     val keycloakClientId: String,
     val keycloakClientSecret: String,
     val keycloakRedirectUri: String,
+    val keycloakProvider: String,
+    val keycloakProviderName: String,
     val appPort: Int,
 )
 
@@ -22,6 +24,8 @@ fun Application.loadConfig(): Config {
         keycloakClientId = keycloakConfig.KEYCLOAK_CLIENT_ID,
         keycloakClientSecret = keycloakConfig.KEYCLOAK_CLIENT_SECRET,
         keycloakRedirectUri = keycloakConfig.KEYCLOAK_REDIRECT_URI,
+        keycloakProvider = keycloakConfig.KEYCLOAK_PROVIDER,
+        keycloakProviderName = keycloakConfig.KEYCLOAK_PROVIDER_NAME,
         appPort = 8006
     )
 }
