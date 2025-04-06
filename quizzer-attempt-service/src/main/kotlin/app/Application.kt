@@ -2,7 +2,6 @@ package com.example.app
 
 import com.example.configs.Config
 import com.example.modules.configureModules
-import com.example.plugins.configureMonitoring
 import com.example.plugins.configureRouting
 import com.example.plugins.configureSerialization
 import io.ktor.server.application.*
@@ -15,7 +14,6 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     configureModules()
-    configureMonitoring()
     configureSerialization()
     configureRouting()
 }
