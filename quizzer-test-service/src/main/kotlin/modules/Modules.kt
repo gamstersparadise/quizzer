@@ -18,10 +18,11 @@ fun Application.configureModules() {
         slf4jLogger()
         modules(appModules)
     }
-    install(ContentNegotiation){
+    install(ContentNegotiation) {
         json(Json {
             prettyPrint = true
             isLenient = true
-        })
+        }
+        )
     }
 }

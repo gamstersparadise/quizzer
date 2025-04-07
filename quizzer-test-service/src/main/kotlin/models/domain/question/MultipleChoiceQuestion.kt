@@ -1,11 +1,14 @@
 package com.example.models.domain.question
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId
 
 @Serializable
+@SerialName("MULTIPLE_CHOICE")
 data class MultipleChoiceQuestion(
     override val questionId: String = ObjectId().toString(),
+    @SerialName("questionType")
     override val type: QuestionType = QuestionType.MULTIPLE_CHOICE,
     override val text: String,
     override val points: Int,

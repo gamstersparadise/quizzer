@@ -1,11 +1,14 @@
 package com.example.models.domain.question
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId
 
 @Serializable
+@SerialName("SINGLE_WORD")
 data class SingleWordAnswerQuestion(
     override val questionId: String = ObjectId().toString(),
+    @SerialName("questionType")
     override val type: QuestionType = QuestionType.SINGLE_WORD,
     override val text: String,
     override val points: Int,
