@@ -46,10 +46,11 @@ class TokenService(private val httpClient: HttpClient) : ITokenService {
             }
         }.body()
 
-        return TokenInfo(accessToken = response.access_token, expiresAt = response.expires_at.toString())
+        return TokenInfo(accessToken = response.accessToken, expiresAt = response.expiresAt)
     }
 
-    private fun isTokenExpired(expiresAt: String?): Boolean {
+    private fun isTokenExpired(expiresAt: Long?): Boolean {
+        // to do
         return false
     }
 }

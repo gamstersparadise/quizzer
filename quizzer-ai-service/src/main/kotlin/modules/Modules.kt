@@ -5,8 +5,8 @@ import org.koin.ktor.plugin.Koin
 import org.koin.logger.slf4jLogger
 
 val appModules = listOf(
-    tokenServiceModule,
-    httpClientModule
+    services,
+    clients
 )
 
 fun Application.configureModules() {
