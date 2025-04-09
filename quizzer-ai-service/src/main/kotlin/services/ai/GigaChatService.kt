@@ -17,7 +17,7 @@ class GigaChatService(
     private val tokenService: ITokenService
 ) : IAIService {
 
-    override suspend fun makeRequest(content: String): GigaChatResponse {
+    override suspend fun makeRequest(content: String): String {
         val accessToken = tokenService.getValidToken()
         val request = GigaChatRequest(
             messages = listOf(Message(content = GeneralPrompt.getPrompt(content))),
@@ -39,10 +39,11 @@ class GigaChatService(
             }
         }.body()
 
-        return GigaChatResponse(
-            model = response.model,
-            created = response.created,
-            choices = response.choices
-        )
+        return extractJson(response.choices[0].message.content).toString()
+    }
+
+    private fun extractJson(input: String): String? {
+        val regex = Regex("```json\\s*([\\s\\S]*?)\\s*```")
+        return regex.find(input)?.groupValues?.get(1)
     }
 }
