@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+  quizzer-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: quizzer-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: password
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - microservices-network
+
+  quizzer-test-service-mongodb:
+    image: mongo:latest
+    container_name: quizzer-test-service-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongodb1-data:/data/db
+    networks:
+      - microservices-network
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  quizzer-attempt-service-mongodb:
+    image: mongo:latest
+    container_name: quizzer-attempt-service-mongodb
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongodb2-data:/data/db
+    networks:
+      - microservices-network
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  quizzer-test-service:
+    build:
+      context: ./quizzer-test-service
+      dockerfile: Dockerfile
+    container_name: quizzer-test-service
+    ports:
+      - "8007:8007"
+    environment:
+      - MONGO_URI=mongodb://root:example@quizzer-test-service-mongodb:27017
+      - RABBITMQ_URI=amqp://admin:password@rabbitmq:5672
+    depends_on:
+      quizzer-test-service-mongodb:
+        condition: service_healthy
+      quizzer-rabbitmq:
+        condition: service_healthy
+    networks:
+      - microservices-network
+
+  quizzer-attempt-service:
+    build:
+      context: ./quizzer-attempt-service
+      dockerfile: Dockerfile
+    container_name: quizzer-attempt-service
+    ports:
+      - "8008:8008"
+    environment:
+      - MONGODB_URI=mongodb://root:example@quizzer-attempt-service-mongodb:27018
+      - RABBITMQ_URI=amqp://admin:password@rabbitmq:5672
+    depends_on:
+      quizzer-attempt-service-mongodb:
+        condition: service_healthy
+      quizzer-rabbitmq:
+        condition: service_healthy
+    networks:
+      - microservices-network
+
+  quizzer-ai-service:
+    build:
+      context: ./quizzer-ai-service
+      dockerfile: Dockerfile
+    container_name: quizzer-ai-service
+    ports:
+      - "8009:8009"
+    environment:
+      - RABBITMQ_URI=amqp://admin:password@rabbitmq:5672
+    depends_on:
+      quizzer-rabbitmq:
+        condition: service_healthy
+    networks:
+      - microservices-network
+
+  quizzer-api-gateway-service:
+    build:
+      context: ./quizzer-gateway
+      dockerfile: Dockerfile
+    container_name: quizzer-api-gateway-service
+    ports:
+      - "8006:8006"
+    environment:
+      - RABBITMQ_URI=amqp://admin:password@rabbitmq:5672
+    depends_on:
+      quizzer-rabbitmq:
+        condition: service_healthy
+    networks:
+      - microservices-network
+
+volumes:
+  mongodb1-data:
+  mongodb2-data:
+
+networks:
+  microservices-network:
+    driver: bridge
