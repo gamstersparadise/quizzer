@@ -43,17 +43,7 @@ fun Application.configureRabbitMQ() {
             queue = "ai-test-generation-queue"
             exchange = "test-creation-events"
             routingKey = "ai-test-generation"
-            exchangeDeclare {
-                exchange = "test-creation-events"
-                type = "direct"
-            }
-            queueDeclare {
-                queue = "ai-test-generation-queue"
-                arguments = mapOf(
-                    "x-dead-letter-exchange" to "dlx",
-                    "x-dead-letter-routing-key" to "dlq-dlx"
-                )
-            }
+
         }
     }
 

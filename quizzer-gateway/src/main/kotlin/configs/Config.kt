@@ -13,10 +13,20 @@ data class Config(
     val keycloakProvider: String,
     val keycloakProviderName: String,
     val appPort: Int,
+    val rabbitMQConfig: RabbitMQConfig
 )
 
 fun Application.loadConfig(): Config {
     val keycloakConfig = KeycloakConfig
+
+    val rabbitMQConfig: RabbitMQConfig by lazy {
+        RabbitMQConfig(
+            defaultConnectionName = "default-connection",
+            tlsEnabled = false,
+            dispatcherThreadPollSize = 4,
+            uri = "amqp://admin:password@localhost:5672/%2F"
+        )
+    }
 
     return Config(
         keycloakServerUrl = keycloakConfig.KEYCLOAK_SERVER_URL,
@@ -26,7 +36,8 @@ fun Application.loadConfig(): Config {
         keycloakRedirectUri = keycloakConfig.KEYCLOAK_REDIRECT_URI,
         keycloakProvider = keycloakConfig.KEYCLOAK_PROVIDER,
         keycloakProviderName = keycloakConfig.KEYCLOAK_PROVIDER_NAME,
-        appPort = 8006
+        appPort = 8006,
+        rabbitMQConfig = rabbitMQConfig
     )
 }
 

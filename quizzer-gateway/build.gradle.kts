@@ -36,4 +36,5 @@ dependencies {
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
     implementation(libs.koin.ktor)
+    implementation(libs.ktor.server.rabbitmq)
 }

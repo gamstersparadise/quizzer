@@ -24,7 +24,7 @@ object Config {
             defaultConnectionName = "default-connection",
             tlsEnabled = false,
             dispatcherThreadPollSize = 4,
-            uri = dotenv["RABBIT_MQ_URI"] ?: "amqp://guest:guest@localhost:5672"
+            uri = dotenv["RABBIT_MQ_URI"] ?: "amqp://admin:password@localhost:5672/%2F"
         )
     }
 
