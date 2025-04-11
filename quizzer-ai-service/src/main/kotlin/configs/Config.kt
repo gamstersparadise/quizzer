@@ -19,5 +19,14 @@ object Config {
         )
     }
 
+    val rabbitMQConfig: RabbitMQConfig by lazy {
+        RabbitMQConfig(
+            defaultConnectionName = "default-connection",
+            tlsEnabled = false,
+            dispatcherThreadPollSize = 4,
+            uri = dotenv["RABBIT_MQ_URI"] ?: "amqp://guest:guest@localhost:5672"
+        )
+    }
+
     val appPort: Int = (dotenv["APP_PORT"] ?: "8009").toInt()
 }

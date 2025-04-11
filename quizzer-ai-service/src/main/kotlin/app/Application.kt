@@ -4,6 +4,7 @@ import com.example.configs.Config
 import com.example.configureRouting
 import com.example.configureSerialization
 import com.example.modules.configureModules
+import com.example.plugins.rabbit.configureRabbitMQ
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -16,4 +17,5 @@ fun Application.module() {
     configureSerialization()
     configureModules()
     configureRouting()
+    configureRabbitMQ()
 }
