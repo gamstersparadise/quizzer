@@ -4,7 +4,6 @@ WORKDIR /app
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
 COPY gradle.properties .
-COPY gradle gradle
 COPY src src
 
 RUN gradle --no-daemon clean build

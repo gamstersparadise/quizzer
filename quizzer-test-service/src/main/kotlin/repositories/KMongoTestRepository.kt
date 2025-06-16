@@ -25,9 +25,10 @@ class KMongoTestRepository(
         return collection.find(Test::authorId eq authorId).toList()
     }
 
-    override suspend fun update(test: Test): Boolean {
-        return collection.replaceOne(Test::id eq test.id, test)
+    override suspend fun update(id: String, test: Test): Test? {
+        collection.replaceOne(Test::id eq id, test)
             .wasAcknowledged()
+        return collection.findOne(Test::id eq id)
     }
 
     override suspend fun delete(id: String): Boolean {

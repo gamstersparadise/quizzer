@@ -5,10 +5,10 @@ import kotlinx.serialization.Serializable
 import java.time.Instant
 
 @Serializable
-data class AIRequestFailed(
+data class TestCreationStarted (
     override val testId: String,
     override val userId: String,
-    val error: String,
+    val content: String,
     @Serializable(with = InstantSerializer::class)
     override val timestamp: Instant = Instant.now()
 ) : TestEvent

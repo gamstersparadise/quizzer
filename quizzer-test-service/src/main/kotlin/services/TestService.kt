@@ -17,8 +17,8 @@ class TestService(private val repository: ITestRepository) : ITestService {
         return repository.findByAuthor(authorId)
     }
 
-    override suspend fun update(test: Test): Boolean {
-        return repository.update(test)
+    override suspend fun update(id: String, test: Test): Test? {
+        return repository.update(id, test)
     }
 
     override suspend fun delete(id: String): Boolean {

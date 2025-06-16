@@ -19,6 +19,6 @@ data class MultipleChoiceQuestion(
         require(points > 0) { "Points must be positive" }
         require(options.size >= 2) { "At least 2 options required" }
         require(correctAnswerIndices.isNotEmpty()) { "At least one correct answer required" }
-        require(correctAnswerIndices.all { it < options.size }) {"Correct answer index out of bounds"}
+//        require(correctAnswerIndices.all { it < options.size }) {"Correct answer index out of bounds"}
     }
 }

@@ -7,7 +7,7 @@ import org.litote.kmongo.reactivestreams.KMongo
 val databaseModule = module {
     single {
         KMongo.createClient(
-            System.getenv("MONGO_URI") ?: "mongodb://root:example@quizzer-test-service-mongodb:27017"
+            System.getenv("MONGO_URI") ?: "mongodb://root:example@localhost:27017/?authSource=admin"
         ).coroutine.getDatabase("test_db")
     }
 }

@@ -6,7 +6,6 @@ WORKDIR /app
 COPY build.gradle.kts .
 COPY settings.gradle.kts .
 COPY gradle.properties .
-COPY gradle gradle
 COPY src src
 
 # Build the application

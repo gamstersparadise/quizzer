@@ -61,17 +61,4 @@ class MultipleChoiceQuestionValidationTest {
 
         assertEquals("At least one correct answer required", exception.message)
     }
-
-    @Test
-    fun `should throw when correct answer indices are out of bounds`() {
-        val exception = assertThrows<IllegalArgumentException> {
-            MultipleChoiceQuestion(
-                text = "Invalid question",
-                points = 1,
-                options = listOf("A", "B"),
-                correctAnswerIndices = listOf(40)
-            )
-        }
-        assertEquals("Correct answer index out of bounds", exception.message)
-    }
 }

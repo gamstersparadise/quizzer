@@ -4,6 +4,7 @@ kotlin-version = "2.1.20"
 ktor-version = "3.1.1"
 logback-version = "1.4.14"
 koin-version = "3.5.6"
+kotlin-rpc-version = "0.6.2"
 
 [libraries]
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor-version" }
@@ -28,3 +29,5 @@ ktor-server-rabbitmq = { module = "io.github.damirdenis-tudor:ktor-server-rabbit
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor-version" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
+kotlin-rpc = {id = "org.jetbrains.kotlinx.rpc.plugin", version.ref = "kotlin-rpc-version"}
+

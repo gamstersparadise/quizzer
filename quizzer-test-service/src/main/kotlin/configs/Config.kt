@@ -1,6 +1,9 @@
 package com.example.configs
 
 import io.github.cdimascio.dotenv.dotenv
+import io.ktor.server.application.*
+import org.koin.core.module.Module
+import org.koin.dsl.module
 
 object Config {
     private val dotenv = dotenv {
@@ -12,4 +15,13 @@ object Config {
     val mongoDbName: String = dotenv["MONGO_DB_NAME"] ?: "test_db"
     val appPort: Int = (dotenv["APP_PORT"] ?: "8080").toInt()
     val appEnv: String = dotenv["APP_ENV"] ?: "development"
+
+    val rabbitMQConfig: RabbitMQConfig by lazy {
+        RabbitMQConfig(
+            defaultConnectionName = "default-connection",
+            tlsEnabled = false,
+            dispatcherThreadPollSize = 4,
+            uri = "amqp://admin:password@localhost:5672/%2F"
+        )
+    }
 }

@@ -1,11 +1,14 @@
 package com.example.modules
 
-import com.example.configs.configModule
 import io.ktor.server.application.*
 import org.koin.ktor.plugin.Koin
 
+import modules.configModule
+import modules.rpcModule
+
 val appModules = listOf(
-    configModule
+    configModule,
+    rpcModule
 )
 
 fun Application.configureModules() {

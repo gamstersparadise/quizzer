@@ -5,6 +5,7 @@ import com.example.models.domain.question.SingleWordAnswerQuestion
 import kotlin.test.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.assertThrows
+import java.time.Instant
 
 class TestTest {
 
@@ -26,7 +27,7 @@ class TestTest {
 
         val test = Test(
             authorId = "user123",
-            created = "2023-01-01",
+            created = Instant.now(),
             name = "Sample Test",
             questions = questions
         )
@@ -57,7 +58,7 @@ class TestTest {
 
         val test = Test(
             authorId = "user123",
-            created = "2023-01-01",
+            created = Instant.now(),
             name = "Points Test",
             questions = questions
         )
@@ -69,7 +70,7 @@ class TestTest {
     fun `should have default values`() {
         val test = Test(
             authorId = "user123",
-            created = "2023-01-01",
+            created = Instant.now(),
             name = "Default Test",
             questions = emptyList()
         )
@@ -84,14 +85,14 @@ class TestTest {
     fun `should generate unique links`() {
         val test1 = Test(
             authorId = "user123",
-            created = "2023-01-01",
+            created = Instant.now(),
             name = "Test 1",
             questions = emptyList()
         )
 
         val test2 = Test(
             authorId = "user123",
-            created = "2023-01-01",
+            created = Instant.now(),
             name = "Test 2",
             questions = emptyList()
         )
@@ -104,7 +105,7 @@ class TestTest {
         val exception = assertThrows<IllegalArgumentException> {
             Test(
                 authorId = "user123",
-                created = "2023-01-01",
+                created = Instant.now(),
                 name = "",
                 questions = emptyList()
             )
@@ -118,7 +119,7 @@ class TestTest {
         val exception = assertThrows<IllegalArgumentException> {
             Test(
                 authorId = "",
-                created = "2023-01-01",
+                created = Instant.now(),
                 name = "Test",
                 questions = emptyList()
             )

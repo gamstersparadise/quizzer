@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlin.plugin.serialization)
+    alias(libs.plugins.kotlin.rpc)
 }
 
 group = "com.example"
@@ -37,4 +38,17 @@ dependencies {
     testImplementation(libs.kotlin.test.junit)
     implementation(libs.koin.ktor)
     implementation(libs.ktor.server.rabbitmq)
+
+    // clean up
+// Client API
+    implementation("org.jetbrains.kotlinx:kotlinx-rpc-krpc-client:0.6.2")
+    // Server API
+    implementation("org.jetbrains.kotlinx:kotlinx-rpc-krpc-server:0.6.2")
+    // Serialization module. Also, protobuf and cbor are provided
+    implementation("org.jetbrains.kotlinx:kotlinx-rpc-krpc-serialization-json:0.6.2")
+
+    // Transport implementation for Ktor
+    implementation("org.jetbrains.kotlinx:kotlinx-rpc-krpc-ktor-client:0.6.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-rpc-krpc-ktor-server:0.6.2")
+
 }

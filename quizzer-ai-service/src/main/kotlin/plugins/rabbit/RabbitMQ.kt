@@ -2,6 +2,7 @@ package com.example.plugins.rabbit
 
 import com.example.configs.Config
 import com.example.models.rabbit.TestCreationStarted
+import com.example.services.generator.ITestGeneratorService
 import io.github.damir.denis.tudor.ktor.server.rabbitmq.RabbitMQ
 import io.github.damir.denis.tudor.ktor.server.rabbitmq.dsl.*
 import io.github.damir.denis.tudor.ktor.server.rabbitmq.rabbitMQ
@@ -10,6 +11,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.json.Json
+import org.koin.ktor.ext.inject
 import java.time.Instant
 
 fun Application.configureRabbitMQ() {
@@ -21,32 +23,7 @@ fun Application.configureRabbitMQ() {
 
     }
 
-    // dead letter exchange + dead letter queue
-    rabbitmq {
-        queueBind {
-            queue = "dlq"
-            exchange = "dlx"
-            routingKey = "dlq-dlx"
-            exchangeDeclare {
-                exchange = "dlx"
-                type = "direct"
-            }
-            queueDeclare {
-                queue = "dlq"
-                durable = true
-            }
-        }
-    }
-
-    rabbitmq {
-        queueBind {
-            queue = "ai-test-generation-queue"
-            exchange = "test-creation-events"
-            routingKey = "ai-test-generation"
-
-        }
-    }
-
+    val testGeneratorService by inject<ITestGeneratorService>()
 
     rabbitmq {
         basicConsume {
@@ -55,7 +32,10 @@ fun Application.configureRabbitMQ() {
             dispatcher = Dispatchers.rabbitMQ
             coroutinePollSize = 100
             deliverCallback<String> { tag, message ->
-                log.info("Received message: $message")
+                val request = Json.decodeFromString<TestCreationStarted>(message)
+
+                testGeneratorService.generateTest(request.userId, request.testId, request.content)
+                log.info("Received message: $message, $tag")
             }
         }
     }
@@ -69,7 +49,7 @@ fun Application.configureRabbitMQ() {
                     val event = TestCreationStarted(
                         testId = "dkdk",
                         userId = "dddddddd",
-                        noteContent = "890809",
+                        content = "890809",
                         timestamp = Instant.now()
                     )
                     message {Json.encodeToString(event)}

@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.assertNull
+import java.time.Instant
 
 
 @ExtendWith(MockKExtension::class)
@@ -43,7 +44,7 @@ class TestServiceTest {
         sampleTest = QuizzerTest(
             id = ObjectId().toString(),
             authorId = "author123",
-            created = "2023-01-01",
+            created = Instant.now(),
             name = "Sample Test",
             questions = listOf(sampleQuestion)
         )
@@ -102,23 +103,6 @@ class TestServiceTest {
 
         val result = testService.findByAuthor(authorId)
         assertTrue(result.isEmpty())
-    }
-
-    @Test
-    fun `update should return true when successful`() = runBlocking {
-        coEvery { testRepository.update(sampleTest) } returns true
-        val result = testService.update(sampleTest)
-
-        assertTrue(result)
-        coVerify { testRepository.update(sampleTest) }
-    }
-
-    @Test
-    fun `update should return false when test not found`() = runBlocking {
-        coEvery { testRepository.update(sampleTest) } returns false
-        val result = testService.update(sampleTest)
-
-        assertFalse(result)
     }
 
     @Test

@@ -1,24 +1,30 @@
 package com.example.routes.test
 
+import com.example.models.domain.test.Test
 import io.github.damir.denis.tudor.ktor.server.rabbitmq.dsl.basicPublish
 import io.github.damir.denis.tudor.ktor.server.rabbitmq.dsl.rabbitmq
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
 import models.rabbit.TestCreationStartedEvent
-import java.time.Instant
+import models.rpc.test.*
+import org.koin.ktor.ext.inject
 
 fun Route.testRoutes() {
+    val service: TestServiceRPC by application.inject()
 
     route("/tests") {
-        get {
-            val event = TestCreationStartedEvent(
-                testId = "678",
-                userId = "909090900909090",
-                content = "890809",
-                timestamp = Instant.now()
-            )
 
+        post {
+            val userId = "1b41485b-771c-432f-8925-76882410791f"
+            val testId = "684fe32c4a8e01688dcd67e6"
+            val textBody = call.receiveText()
+            val event = TestCreationStartedEvent(
+                testId = testId,
+                userId = userId,
+                content = textBody,
+            )
             rabbitmq {
                 basicPublish {
                     exchange = "test-creation-events"
@@ -26,23 +32,43 @@ fun Route.testRoutes() {
                     message { Json.encodeToString(event) }
                 }
             }
-            call.respond("Get all tests by user stub \uD83E\uDEB5")
+            call.respond(Test(
+                testId,
+                authorId = userId,
+                attempts = 0,
+                name = "New Test by $userId",
+                questions = emptyList(),
+                status = "IN_PROGRESS"
+            ))
         }
 
-        post {
-            call.respond("Generate test stub \uD83E\uDEB5")
+        get {
+            val userId = "123333"
+            val request = GetTestsByUserRPCRequest(userId)
+            val response = service.getTestsByUser(request)
+            call.respond(response)
         }
 
         get("/{test_id}") {
-            call.respond("Get test by id ${call.parameters["test_id"]} stub \uD83E\uDEB5")
+            val testId = call.parameters["test_id"]
+            val request = GetTestByTestIdRPCRequest(testId)
+            val response = service.getTestByTestId(request)
+            call.respond(response)
         }
 
         put("/{test_id}") {
-            call.respond("Edit test ${call.parameters["test_id"]} stub \uD83E\uDEB5")
+            val testId = call.parameters["test_id"]
+            val test = call.receive<Test>()
+            val request = EditTestRPCRequest(testId, test)
+            val response = service.editTest(request)
+            call.respond(response)
         }
 
         delete("/{test_id}") {
-            call.respond("Delete test by id ${call.parameters["test_id"]} stub \uD83E\uDEB5")
+            val testId = call.parameters["test_id"]
+            val request = DeleteTestRPCRequest(testId)
+            val response = service.deleteTest(request)
+            call.respond(response)
         }
     }
 

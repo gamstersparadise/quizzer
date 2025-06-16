@@ -10,7 +10,7 @@ interface ITestRepository {
 
     suspend fun findByAuthor(authorId: String): List<Test>
 
-    suspend fun update(test: Test): Boolean
+    suspend fun update(id: String, test: Test): Test?
 
     suspend fun delete(id: String): Boolean
 

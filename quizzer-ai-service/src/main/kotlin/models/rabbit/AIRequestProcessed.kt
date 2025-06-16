@@ -8,7 +8,8 @@ import java.time.Instant
 data class AIRequestProcessed(
     override val testId: String,
     override val userId: String,
-    val json: String,
+    var json: String?,
     @Serializable(with = InstantSerializer::class)
-    override val timestamp: Instant = Instant.now()
-) : TestEvent
+    override var timestamp: Instant = Instant.now(),
+    var status: AIGenerationEventStatus = AIGenerationEventStatus.success,
+    ) : TestEvent

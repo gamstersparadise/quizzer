@@ -8,6 +8,7 @@ import com.example.plugins.configureSerialization
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import plugins.configureRabbitMQ
 
 fun main(args: Array<String>) {
     embeddedServer(Netty, port = Config.appPort, module = Application::module).start()
@@ -17,5 +18,6 @@ fun Application.module() {
     configureModules()
     configureMonitoring()
     configureSerialization()
+    configureRabbitMQ()
     configureRouting()
 }

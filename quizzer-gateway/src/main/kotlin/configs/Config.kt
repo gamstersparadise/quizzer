@@ -40,7 +40,3 @@ fun Application.loadConfig(): Config {
         rabbitMQConfig = rabbitMQConfig
     )
 }
-
-val configModule: Module = module {
-    single { get<Application>().loadConfig() }
-}
